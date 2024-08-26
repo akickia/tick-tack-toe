@@ -1,5 +1,5 @@
 import Square from './Square';
-import '../style/board.css';
+import '../style/board.scss';
 import { useEffect, useState } from 'react';
 import { useStore } from '../store/store';
 export default function Board({
@@ -19,6 +19,7 @@ export default function Board({
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
   const mark = useStore((state) => state.marks[user]);
+  const { language } = useStore();
 
   useEffect(() => {
     checkWinner();
@@ -83,8 +84,10 @@ export default function Board({
           })
         : winner && (
             <div className="winning-container">
-              <h1 className="win">{isWinner.toLocaleUpperCase()} VANN!</h1>
-              <button onClick={resetGame}>Börja om</button>
+              <h1 className="win">
+                {isWinner.toLocaleUpperCase()} {language.win}
+              </h1>
+              <button onClick={resetGame}>{language.restart}</button>
             </div>
           )}
     </div>

@@ -1,22 +1,24 @@
-import { useState } from 'react';
-import './App.css';
+import { useEffect, useState } from 'react';
 import Board from './components/Board';
 import { useStore } from './store/store';
 
 function App() {
-  //TODO:  ts fix event - CHECK
-  //TODO: Disable input on start - CHECK
-  //TODO: Start game - CHECK
-  //TODO: State management for users and current user
   //TODO: Change input and edit structure.
+  //TODO: Add toggle for language
+  // localStorage.setItem('language', 'English');
 
-  const { players, updatePlayers } = useStore();
-
-  console.log(players);
+  const { players, updatePlayers, language } = useStore();
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isStarted, setIsStarted] = useState(false);
+  const [playerLanguage, setPlayerLanguage] = useState('English');
+
+  useEffect(() => {
+    localStorage.setItem('language', playerLanguage);
+    //Uppdaterar localstorage men localstorage hämtar inte igen. Fundera igen.
+  }, [playerLanguage, language]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsEditing(true);
     const updatedUsers = [...players];
@@ -33,7 +35,6 @@ function App() {
   };
   const startGame = () => {
     setIsEditing(false);
-
     setIsStarted(true);
   };
 
@@ -44,17 +45,28 @@ function App() {
       setCurrentUserIndex(0);
     }
   };
+
+  const toggleLanguage = () => {
+    if (playerLanguage === 'English') {
+      setPlayerLanguage('Swedish');
+    } else {
+      setPlayerLanguage('English');
+    }
+  };
+
   return (
     <div className="App">
-      <h1>TICK TACK TOE</h1>
+      <h1>{language.heading}</h1>
       {!isStarted && (
         <input
-          placeholder={`Redigera spelare ${currentUserIndex + 1}`}
+          placeholder={`${language.edit} ${currentUserIndex + 1}`}
           value={inputValue}
           onChange={(e) => handleChange(e)}
         ></input>
       )}
-      {isEditing && <button onClick={() => handleSaveUser()}>save</button>}
+      {isEditing && (
+        <button onClick={() => handleSaveUser()}>{language.save}</button>
+      )}
       {isStarted ? (
         <p>{players[currentUserIndex]}</p>
       ) : (
@@ -62,7 +74,7 @@ function App() {
       )}
       <div className="card">
         {!isStarted && (
-          <button onClick={() => startGame()}>Starta spelet</button>
+          <button onClick={() => startGame()}>{language.start}</button>
         )}
         <Board
           isStarted={isStarted}
@@ -72,6 +84,7 @@ function App() {
           setIsStarted={setIsStarted}
         ></Board>
       </div>
+      <button onClick={() => toggleLanguage()}>Toggla</button>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useStore } from '../store/store';
-import '../style/square.css';
+import '../style/square.scss';
 export default function Square({
   squareNo,
   user,
