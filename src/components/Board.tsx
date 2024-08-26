@@ -1,6 +1,7 @@
 import Square from './Square';
 import '../style/board.css';
 import { useEffect, useState } from 'react';
+import { useStore } from '../store/store';
 export default function Board({
   isStarted,
   user,
@@ -17,6 +18,7 @@ export default function Board({
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
+  const mark = useStore((state) => state.marks[user]);
 
   useEffect(() => {
     checkWinner();
@@ -42,7 +44,7 @@ export default function Board({
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        setIsWinner(squares[a] === 'X' ? users[0] : users[1]);
+        setIsWinner(squares[a] === mark ? users[0] : users[1]);
         setWinner(true);
         return;
       }

@@ -1,3 +1,4 @@
+import { useStore } from '../store/store';
 import '../style/square.css';
 export default function Square({
   squareNo,
@@ -10,8 +11,10 @@ export default function Square({
   changeMark: (squareNo: number, mark: string) => void;
   mark: string;
 }) {
+  const marks = useStore((state) => state.marks);
   const handleClick = () => {
     if (!mark) {
+      changeMark(squareNo, marks[user]);
       const newMark = user === 0 ? 'X' : '0';
       changeMark(squareNo, newMark);
       console.log('mark: ', mark, 'user: ', user, squareNo);

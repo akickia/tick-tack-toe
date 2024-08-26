@@ -4,13 +4,13 @@ import Board from './components/Board';
 import { useStore } from './store/store';
 
 function App() {
-  //TODO:  ts fix event
+  //TODO:  ts fix event - CHECK
   //TODO: Disable input on start - CHECK
   //TODO: Start game - CHECK
   //TODO: State management for users and current user
   //TODO: Change input and edit structure.
 
-  const { marks, players, test, increaseTest, updatePlayers } = useStore();
+  const { players, updatePlayers } = useStore();
 
   console.log(players);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
