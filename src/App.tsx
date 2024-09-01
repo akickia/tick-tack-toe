@@ -1,22 +1,32 @@
 import { useEffect, useState } from 'react';
 import Board from './components/Board';
 import { useStore } from './store/store';
+import { langEng, langSwe } from './assets/translations';
 
 function App() {
   //TODO: Change input and edit structure.
   //TODO: Add toggle for language
   // localStorage.setItem('language', 'English');
 
-  const { players, updatePlayers, language } = useStore();
+  const { players, updatePlayers, language, updateLanguage } = useStore();
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isStarted, setIsStarted] = useState(false);
   const [playerLanguage, setPlayerLanguage] = useState('English');
 
+  const checkLanguage = () => {
+    const localStorageLanguage = localStorage.getItem('language');
+    if (localStorageLanguage && localStorageLanguage === 'English') {
+      updateLanguage(langEng);
+    } else if (localStorageLanguage && localStorageLanguage === 'Swedish') {
+      updateLanguage(langSwe);
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem('language', playerLanguage);
-    //Uppdaterar localstorage men localstorage hämtar inte igen. Fundera igen.
+    checkLanguage();
   }, [playerLanguage, language]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +94,7 @@ function App() {
           setIsStarted={setIsStarted}
         ></Board>
       </div>
-      <button onClick={() => toggleLanguage()}>Toggla</button>
+      <button onClick={() => toggleLanguage()}>{language.toggle}</button>
     </div>
   );
 }

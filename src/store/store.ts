@@ -11,15 +11,17 @@ if (localStorageLanguage && localStorageLanguage === 'English') {
 
 interface Store {
   marks: string[];
-
   language: Languages;
-  //TODO: FIX!
   players: string[];
   updatePlayers: (updatedUsers: string[]) => void;
+  updateLanguage: (updatedLanguage: Languages) => void;
 }
+
 export const useStore = create<Store>((set) => ({
   marks: ['X', 'O'],
   language: language,
   players: [language.playerOne, language.playerTwo],
   updatePlayers: (updatedUsers: string[]) => set({ players: updatedUsers }),
+  updateLanguage: (updatedLanguage: Languages) =>
+    set({ language: updatedLanguage }),
 }));
