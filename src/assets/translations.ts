@@ -7,7 +7,7 @@ export const langEng = {
   start: 'START GAME',
   win: 'WON!',
   restart: 'RESTART GAME',
-  toggle: 'change to Swedish',
+  toggle: 'Change to Swedish',
 };
 
 export const langSwe = {
@@ -19,7 +19,7 @@ export const langSwe = {
   start: 'STARTA',
   win: 'VANN!',
   restart: 'BÖRJA OM',
-  toggle: 'change to English',
+  toggle: 'Change to English',
 };
 
 export type Languages = {

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Board from './components/Board';
 import { useStore } from './store/store';
-import { langEng, langSwe } from './assets/translations';
+
+import Toggle from './components/Toggle';
 
 function App() {
   //TODO: Change input and edit structure.
@@ -13,21 +14,6 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [isStarted, setIsStarted] = useState(false);
-  const [playerLanguage, setPlayerLanguage] = useState('English');
-
-  const checkLanguage = () => {
-    const localStorageLanguage = localStorage.getItem('language');
-    if (localStorageLanguage && localStorageLanguage === 'English') {
-      updateLanguage(langEng);
-    } else if (localStorageLanguage && localStorageLanguage === 'Swedish') {
-      updateLanguage(langSwe);
-    }
-  };
-
-  useEffect(() => {
-    localStorage.setItem('language', playerLanguage);
-    checkLanguage();
-  }, [playerLanguage, language]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsEditing(true);
@@ -56,13 +42,13 @@ function App() {
     }
   };
 
-  const toggleLanguage = () => {
-    if (playerLanguage === 'English') {
-      setPlayerLanguage('Swedish');
-    } else {
-      setPlayerLanguage('English');
-    }
-  };
+  // const toggleLanguage = () => {
+  //   if (playerLanguage === 'English') {
+  //     setPlayerLanguage('Swedish');
+  //   } else {
+  //     setPlayerLanguage('English');
+  //   }
+  // };
 
   return (
     <div className="App">
@@ -75,7 +61,9 @@ function App() {
         ></input>
       )}
       {isEditing && (
-        <button onClick={() => handleSaveUser()}>{language.save}</button>
+        <button className="primary" onClick={() => handleSaveUser()}>
+          {language.save}
+        </button>
       )}
       {isStarted ? (
         <p>{players[currentUserIndex]}</p>
@@ -84,7 +72,9 @@ function App() {
       )}
       <div className="card">
         {!isStarted && (
-          <button onClick={() => startGame()}>{language.start}</button>
+          <button className="primary" onClick={() => startGame()}>
+            {language.start}
+          </button>
         )}
         <Board
           isStarted={isStarted}
@@ -94,7 +84,7 @@ function App() {
           setIsStarted={setIsStarted}
         ></Board>
       </div>
-      <button onClick={() => toggleLanguage()}>{language.toggle}</button>
+      <Toggle />
     </div>
   );
 }

@@ -1,13 +1,5 @@
 import { create } from 'zustand';
-import { langEng, langSwe, Languages } from '../assets/translations';
-
-const localStorageLanguage = localStorage.getItem('language');
-let language = langEng;
-if (localStorageLanguage && localStorageLanguage === 'English') {
-  language = langEng;
-} else if (localStorageLanguage && localStorageLanguage === 'Swedish') {
-  language = langSwe;
-}
+import { langEng, Languages } from '../assets/translations';
 
 interface Store {
   marks: string[];
@@ -19,8 +11,8 @@ interface Store {
 
 export const useStore = create<Store>((set) => ({
   marks: ['X', 'O'],
-  language: language,
-  players: [language.playerOne, language.playerTwo],
+  language: langEng,
+  players: [langEng.playerOne, langEng.playerTwo],
   updatePlayers: (updatedUsers: string[]) => set({ players: updatedUsers }),
   updateLanguage: (updatedLanguage: Languages) =>
     set({ language: updatedLanguage }),

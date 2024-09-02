@@ -1,0 +1,13 @@
+.App {
+  button.toggle {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    width: 50px;
+    height: 50px;
+    img {
+      max-width: 100%;
+      padding: 0;
+    }
+  }
+}
