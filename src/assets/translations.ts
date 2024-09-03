@@ -1,6 +1,6 @@
 export const langEng = {
   heading: 'TICK TACK TOE',
-  edit: 'Edit player',
+  edit: 'Edit',
   save: 'save',
   playerOne: 'Player 1',
   playerTwo: 'Player 2',
@@ -12,7 +12,7 @@ export const langEng = {
 
 export const langSwe = {
   heading: 'TRE I RAD',
-  edit: 'Redigera spelare',
+  edit: 'Redigera',
   save: 'spara',
   playerOne: 'Spelare 1',
   playerTwo: 'Spelare 2',

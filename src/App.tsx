@@ -1,36 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Board from './components/Board';
 import { useStore } from './store/store';
 
 import Toggle from './components/Toggle';
+import Player from './components/Player';
 
 function App() {
-  //TODO: Change input and edit structure.
-  //TODO: Add toggle for language
-  // localStorage.setItem('language', 'English');
+  //Note to self: Refactored players. Check the complicity, feels overcomplicated. Fix error with showing wrong winner. What should go in what component and what should be in the store.
 
-  const { players, updatePlayers, language, updateLanguage } = useStore();
-  const [currentUserIndex, setCurrentUserIndex] = useState(0);
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const { language, players } = useStore();
   const [isStarted, setIsStarted] = useState(false);
+  const [currentUserIndex, setCurrentUserIndex] = useState(0);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsEditing(true);
-    const updatedUsers = [...players];
-    updatedUsers[currentUserIndex] = e.target.value;
-    setInputValue(e.target.value);
-    console.log('updated: ', updatedUsers);
-    updatePlayers(updatedUsers);
-  };
-
-  const handleSaveUser = () => {
-    setIsEditing(false);
-    handleCurrentUser();
-    setInputValue('');
-  };
   const startGame = () => {
-    setIsEditing(false);
+    setCurrentUserIndex(0);
     setIsStarted(true);
   };
 
@@ -40,46 +23,30 @@ function App() {
     } else {
       setCurrentUserIndex(0);
     }
+    console.log(
+      'Current player: ',
+      players[currentUserIndex],
+      currentUserIndex
+    );
   };
-
-  // const toggleLanguage = () => {
-  //   if (playerLanguage === 'English') {
-  //     setPlayerLanguage('Swedish');
-  //   } else {
-  //     setPlayerLanguage('English');
-  //   }
-  // };
 
   return (
     <div className="App">
       <h1>{language.heading}</h1>
-      {!isStarted && (
-        <input
-          placeholder={`${language.edit} ${currentUserIndex + 1}`}
-          value={inputValue}
-          onChange={(e) => handleChange(e)}
-        ></input>
-      )}
-      {isEditing && (
-        <button className="primary" onClick={() => handleSaveUser()}>
-          {language.save}
-        </button>
-      )}
       {isStarted ? (
         <p>{players[currentUserIndex]}</p>
       ) : (
-        players.map((user, i) => <p key={i}>{user}</p>)
+        players.map((player, i) => (
+          <Player key={i} player={player} currentUserIndex={i} />
+        ))
       )}
       <div className="card">
         {!isStarted && (
-          <button className="primary" onClick={() => startGame()}>
-            {language.start}
-          </button>
+          <button onClick={() => startGame()}>{language.start}</button>
         )}
         <Board
           isStarted={isStarted}
           user={currentUserIndex}
-          users={players}
           action={handleCurrentUser}
           setIsStarted={setIsStarted}
         ></Board>

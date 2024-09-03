@@ -6,20 +6,18 @@ export default function Board({
   isStarted,
   user,
   action,
-  users,
   setIsStarted,
 }: {
   isStarted: boolean;
   user: number;
   action: () => void;
-  users: string[];
   setIsStarted: any;
 }) {
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
   const mark = useStore((state) => state.marks[user]);
-  const { language } = useStore();
+  const { language, players } = useStore();
 
   useEffect(() => {
     checkWinner();
@@ -45,7 +43,7 @@ export default function Board({
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        setIsWinner(squares[a] === mark ? users[0] : users[1]);
+        setIsWinner(squares[a] === mark ? players[0] : players[1]);
         setWinner(true);
         return;
       }
