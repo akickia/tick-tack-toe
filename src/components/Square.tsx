@@ -1,5 +1,6 @@
 import { useStore } from '../store/store';
 import '../style/square.scss';
+
 export default function Square({
   squareNo,
   user,
@@ -12,14 +13,16 @@ export default function Square({
   mark: string;
 }) {
   const marks = useStore((state) => state.marks);
+
   const handleClick = () => {
+    //Handle mark, check to refactor.
     if (!mark) {
       changeMark(squareNo, marks[user]);
       const newMark = user === 0 ? 'X' : '0';
       changeMark(squareNo, newMark);
-      console.log('mark: ', mark, 'user: ', user, squareNo);
     }
   };
+
   return (
     <button onClick={handleClick} className="square">
       {mark}

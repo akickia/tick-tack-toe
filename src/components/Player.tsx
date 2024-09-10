@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from '../store/store';
 
-function Player({
+export default function Player({
   player,
   currentUserIndex,
 }: {
@@ -13,6 +13,7 @@ function Player({
   const [inputValue, setInputValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //Changing name in playerlist in store
     const updatedUsers = [...players];
     updatedUsers[currentUserIndex] = e.target.value;
     setInputValue(e.target.value);
@@ -50,5 +51,3 @@ function Player({
     </div>
   );
 }
-
-export default Player;

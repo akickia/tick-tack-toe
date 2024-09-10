@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { langEng, langSwe } from '../assets/translations';
 import { useStore } from '../store/store';
+import { langEng, langSwe } from '../assets/translations';
 import '../style/toggle.scss';
 
-function Toggle() {
+export default function Toggle() {
   const { updateLanguage } = useStore();
 
   return (
@@ -17,5 +16,3 @@ function Toggle() {
     </div>
   );
 }
-
-export default Toggle;

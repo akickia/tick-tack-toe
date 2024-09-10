@@ -1,7 +1,8 @@
-import Square from './Square';
-import '../style/board.scss';
 import { useEffect, useState } from 'react';
 import { useStore } from '../store/store';
+import Square from './Square';
+import '../style/board.scss';
+
 export default function Board({
   isStarted,
   user,
@@ -12,6 +13,7 @@ export default function Board({
   user: number;
   action: () => void;
   setIsStarted: any;
+  //Todo, check type
 }) {
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
@@ -20,6 +22,7 @@ export default function Board({
   const { language, players } = useStore();
 
   useEffect(() => {
+    //Check winner when squares change
     checkWinner();
   }, [squares]);
 
@@ -43,7 +46,7 @@ export default function Board({
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        setIsWinner(squares[a] === mark ? players[0] : players[1]);
+        setIsWinner(squares[a] === mark ? players[1] : players[0]);
         setWinner(true);
         return;
       }
@@ -51,6 +54,7 @@ export default function Board({
   };
 
   const changeMark = (squareNo: number, mark: string) => {
+    //Handle logic for squares. Check to refactor.
     if (!squares[squareNo]) {
       const newSquares = [...squares];
       newSquares[squareNo] = mark;
@@ -60,6 +64,7 @@ export default function Board({
   };
 
   const resetGame = () => {
+    //Resets all necessary options
     setIsWinner('');
     setWinner(false);
     setIsStarted(false);
