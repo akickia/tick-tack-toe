@@ -8,10 +8,10 @@ export default function Toggle() {
   return (
     <div className="language-toggle">
       <button className="toggle" onClick={() => updateLanguage(langSwe)}>
-        <img src="src/assets/flagSwe.png" />
+        <img src="/flagSwe.png" />
       </button>
       <button className="toggle" onClick={() => updateLanguage(langEng)}>
-        <img src="src/assets/flagEng.png" />
+        <img src="/flagEng.png" />
       </button>
     </div>
   );
