@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useStore } from '../store/store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faSave } from '@fortawesome/free-regular-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default function Player({
   player,
@@ -12,15 +15,17 @@ export default function Player({
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
     //Changing name in playerlist in store
     const updatedUsers = [...players];
-    updatedUsers[currentUserIndex] = e.target.value;
-    setInputValue(e.target.value);
+    updatedUsers[currentUserIndex] = inputValue;
     updatePlayers(updatedUsers);
+    if (e.key === 'Enter') {
+      stopEditing();
+    }
   };
 
-  const handleSaveUser = () => {
+  const stopEditing = () => {
     setIsEditing(false);
     setInputValue('');
   };
@@ -32,20 +37,25 @@ export default function Player({
           <input
             placeholder={`${language.edit} ${player}`}
             value={inputValue}
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => handleChange(e)}
           />
-          <button onClick={() => handleSaveUser()}>{language.save}</button>
+          <FontAwesomeIcon
+            icon={faCheck}
+            onClick={() => stopEditing()}
+          ></FontAwesomeIcon>
         </div>
       ) : (
         <div className="flex">
           <p>{player}</p>
-          <button
+
+          <FontAwesomeIcon
+            icon={faEdit}
+            color="FFFFFF"
             onClick={() => {
               setIsEditing(true);
             }}
-          >
-            {language.edit}
-          </button>
+          />
         </div>
       )}
     </div>

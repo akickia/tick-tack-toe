@@ -24,6 +24,7 @@ export default function Board({
   useEffect(() => {
     //Check winner when squares change
     checkWinner();
+    console.log(squares);
   }, [squares]);
 
   const checkWinner = () => {
@@ -49,6 +50,13 @@ export default function Board({
         setIsWinner(squares[a] === mark ? players[1] : players[0]);
         setWinner(true);
         return;
+      } else {
+        //Check for draw
+        if (!squares.includes('')) {
+          setIsWinner(language.draw);
+          setWinner(true);
+          return;
+        }
       }
     }
   };
