@@ -20,3 +20,9 @@
   align-items: center;
   gap: 2rem;
 }
+
+@media screen and (max-width: 500px) {
+  .winning-container {
+    width: 100%;
+  }
+}

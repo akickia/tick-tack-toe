@@ -6,3 +6,9 @@ footer {
   left: 0;
   padding: 1.5rem;
 }
+
+@media screen and (max-width: 500px) {
+  footer {
+    font-size: 14px;
+  }
+}

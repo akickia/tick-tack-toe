@@ -26,6 +26,7 @@ export default function Player({
   };
 
   const stopEditing = () => {
+    //Not very pretty, check for better ways.
     const updatedUsers = [...players];
     updatedUsers[currentUserIndex] = inputValue;
     updatePlayers(updatedUsers);

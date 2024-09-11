@@ -1,6 +1,7 @@
 .square {
-  height: 120px;
-  width: 120px;
+  max-width: 120px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background-color: rgb(220, 254, 220);
   border: 1px solid green;
 }
