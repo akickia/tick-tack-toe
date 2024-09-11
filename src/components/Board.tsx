@@ -24,7 +24,6 @@ export default function Board({
   useEffect(() => {
     //Check winner when squares change
     checkWinner();
-    console.log(squares);
   }, [squares]);
 
   const checkWinner = () => {

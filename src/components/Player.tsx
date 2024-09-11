@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from '../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faSave } from '@fortawesome/free-regular-svg-icons';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default function Player({
@@ -26,6 +26,9 @@ export default function Player({
   };
 
   const stopEditing = () => {
+    const updatedUsers = [...players];
+    updatedUsers[currentUserIndex] = inputValue;
+    updatePlayers(updatedUsers);
     setIsEditing(false);
     setInputValue('');
   };
