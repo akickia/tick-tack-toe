@@ -5,26 +5,29 @@ import '../style/board.scss';
 
 export default function Board({
   isStarted,
-  user,
-  action,
   setIsStarted,
 }: {
   isStarted: boolean;
-  user: number;
-  action: () => void;
   setIsStarted: any;
   //Todo, check type
 }) {
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
-  const mark = useStore((state) => state.marks[user]);
-  const { language, players } = useStore();
+  const { players, currentIndex, updateCurrentIndex, language } = useStore();
 
   useEffect(() => {
     //Check winner when squares change
     checkWinner();
+    if (!winner) {
+      //If no winner - change currentIndex
+      handleCurrentIndex();
+    }
   }, [squares]);
+
+  const handleCurrentIndex = () => {
+    currentIndex === 0 ? updateCurrentIndex(1) : updateCurrentIndex(0);
+  };
 
   const checkWinner = () => {
     //Specify combinations
@@ -46,7 +49,7 @@ export default function Board({
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        setIsWinner(squares[a] === mark ? players[1] : players[0]);
+        setIsWinner(players[currentIndex]);
         setWinner(true);
         return;
       } else {
@@ -61,12 +64,10 @@ export default function Board({
   };
 
   const changeMark = (squareNo: number, mark: string) => {
-    //Handle logic for squares. Check to refactor.
     if (!squares[squareNo]) {
       const newSquares = [...squares];
       newSquares[squareNo] = mark;
       setSquares(newSquares);
-      action();
     }
   };
 
@@ -86,7 +87,6 @@ export default function Board({
               <Square
                 key={i}
                 squareNo={i}
-                user={user}
                 mark={square}
                 changeMark={changeMark}
               />

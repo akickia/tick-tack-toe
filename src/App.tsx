@@ -6,22 +6,13 @@ import Player from './components/Player';
 import Footer from './components/Footer';
 
 export default function App() {
-  const { language, players } = useStore();
+  const { language, players, currentIndex, updateCurrentIndex } = useStore();
   const [isStarted, setIsStarted] = useState(false);
-  const [currentUserIndex, setCurrentUserIndex] = useState(0);
 
   const startGame = () => {
     //Handle starting options
-    setCurrentUserIndex(0);
+    updateCurrentIndex(0);
     setIsStarted(true);
-  };
-
-  const handleCurrentUser = () => {
-    if (currentUserIndex === 0) {
-      setCurrentUserIndex(1);
-    } else {
-      setCurrentUserIndex(0);
-    }
   };
 
   return (
@@ -30,7 +21,7 @@ export default function App() {
         <div className="App">
           <h1>{language.heading}</h1>
           {isStarted ? (
-            <p>{players[currentUserIndex]}</p>
+            <p>{players[currentIndex]}</p>
           ) : (
             players.map((player, i) => (
               <Player key={i} player={player} currentUserIndex={i} />
@@ -40,12 +31,7 @@ export default function App() {
             {!isStarted && (
               <button onClick={() => startGame()}>{language.start}</button>
             )}
-            <Board
-              isStarted={isStarted}
-              user={currentUserIndex}
-              action={handleCurrentUser}
-              setIsStarted={setIsStarted}
-            ></Board>
+            <Board isStarted={isStarted} setIsStarted={setIsStarted}></Board>
           </div>
           <Toggle />
         </div>
