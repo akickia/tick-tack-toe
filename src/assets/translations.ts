@@ -9,6 +9,10 @@ export const langEng = {
   win: 'WON!',
   restart: 'RESTART GAME',
   toggle: 'Change to Swedish',
+  computer: 'Computer',
+  locally: 'Locally',
+  online: 'Online',
+  playertype: 'Opponent',
 };
 
 export const langSwe = {
@@ -22,6 +26,10 @@ export const langSwe = {
   win: 'VANN!',
   restart: 'BÖRJA OM',
   toggle: 'Change to English',
+  computer: 'Dator',
+  locally: 'Lokalt',
+  online: 'Online',
+  playertype: 'Motståndare',
 };
 
 export type Languages = {
@@ -35,4 +43,8 @@ export type Languages = {
   win: string;
   restart: string;
   toggle: string;
+  computer: string;
+  locally: string;
+  online: string;
+  playertype: string;
 };

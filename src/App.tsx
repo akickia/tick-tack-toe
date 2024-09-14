@@ -4,10 +4,17 @@ import Board from './components/Board';
 import Toggle from './components/Toggle';
 import Player from './components/Player';
 import Footer from './components/Footer';
+import Options from './components/Options';
 
 export default function App() {
-  const { language, players, currentIndex, updateCurrentIndex } = useStore();
-  const [isStarted, setIsStarted] = useState(false);
+  const {
+    language,
+    isStarted,
+    players,
+    currentIndex,
+    setIsStarted,
+    updateCurrentIndex,
+  } = useStore();
 
   const startGame = () => {
     //Handle starting options
@@ -20,6 +27,7 @@ export default function App() {
       <main>
         <div className="App">
           <h1>{language.heading}</h1>
+          <Options />
           {isStarted ? (
             <p>{players[currentIndex]}</p>
           ) : (
@@ -31,7 +39,7 @@ export default function App() {
             {!isStarted && (
               <button onClick={() => startGame()}>{language.start}</button>
             )}
-            <Board isStarted={isStarted} setIsStarted={setIsStarted}></Board>
+            <Board></Board>
           </div>
           <Toggle />
         </div>

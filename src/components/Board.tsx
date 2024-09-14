@@ -3,18 +3,18 @@ import { useStore } from '../store/store';
 import Square from './Square';
 import '../style/board.scss';
 
-export default function Board({
-  isStarted,
-  setIsStarted,
-}: {
-  isStarted: boolean;
-  setIsStarted: any;
-  //Todo, check type
-}) {
+export default function Board({}) {
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
-  const { players, currentIndex, updateCurrentIndex, language } = useStore();
+  const {
+    players,
+    isStarted,
+    currentIndex,
+    updateCurrentIndex,
+    setIsStarted,
+    language,
+  } = useStore();
 
   useEffect(() => {
     //Check winner when squares change
