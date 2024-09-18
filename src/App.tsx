@@ -12,6 +12,7 @@ export default function App() {
     isStarted,
     players,
     currentIndex,
+    chosenOption,
     setIsStarted,
     updateCurrentIndex,
   } = useStore();
@@ -28,12 +29,15 @@ export default function App() {
         <div className="App">
           <h1>{language.heading}</h1>
           <Options />
-          {isStarted ? (
-            <p>{players[currentIndex]}</p>
-          ) : (
+          {!isStarted && chosenOption === 'locally' ? (
             players.map((player, i) => (
               <Player key={i} player={player} currentUserIndex={i} />
             ))
+          ) : !isStarted &&
+            (chosenOption === 'computer' || chosenOption === 'online') ? (
+            <Player player={players[0]} currentUserIndex={0}></Player>
+          ) : (
+            <p>{players[currentIndex]}</p>
           )}
           <div className="card">
             {!isStarted && (
