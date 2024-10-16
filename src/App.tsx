@@ -35,8 +35,10 @@ export default function App() {
           ) : !isStarted &&
             (chosenOption === 'computer' || chosenOption === 'online') ? (
             <Player player={players[0]} currentUserIndex={0}></Player>
-          ) : (
+          ) : isStarted && chosenOption === 'locally' ? (
             <p>{players[currentIndex]}</p>
+          ) : (
+            <p>{players[0]}</p>
           )}
           <div className="card">
             {!isStarted ? (

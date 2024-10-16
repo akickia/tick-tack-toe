@@ -7,43 +7,39 @@ export default function Board({ mode }: { mode: string }) {
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
-  const [currentLocalIndex, setCurrentLocalIndex] = useState(0);
   const {
     players,
     marks,
     currentIndex,
+    options,
     setIsStarted,
     updateCurrentIndex,
     language,
   } = useStore();
-  console.log('Rerender: ' + squares);
-  // console.log(currentIndex, currentLocalIndex);
 
   const isFirstRender = useRef(true);
   const winnerRef = useRef(winner);
 
   useEffect(() => {
+    //Make sure winnerState is correct using ref
     winnerRef.current = winner;
   }, [winner]);
 
   useEffect(() => {
+    //Avoid running when rendering component
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-
+    //Check for winner when squares changes
     if (!winnerRef.current) {
       checkWinner();
     }
-    if (mode === 'locally') {
-      setCurrentLocalIndex((prevState) => (prevState === 1 ? 0 : 1));
-      updateCurrentIndex(currentIndex === 1 ? 0 : 1);
-    }
-  }, [squares]); // Trigger endast när squares uppdateras
+    //Update turn
+    updateCurrentIndex(currentIndex === 1 ? 0 : 1);
+  }, [squares]);
 
   const checkWinner = () => {
-    console.log('In winner function');
-    if (winnerRef.current) return;
     //Specify combinations
     const winnerCombinations = [
       [0, 1, 2],
@@ -63,45 +59,42 @@ export default function Board({ mode }: { mode: string }) {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        setIsWinner(players[currentLocalIndex]);
+        if (mode === options[0] && currentIndex === 1) {
+          setIsWinner(language.computer);
+        } else {
+          setIsWinner(players[currentIndex]);
+        }
         setWinner(true);
         return;
-      } else {
-        //Check for draw
-        if (!squares.includes('')) {
-          setIsWinner(language.draw);
-          setWinner(true);
-          return;
-        }
       }
+    }
+    //Check for draw
+    if (!squares.includes('')) {
+      setIsWinner(language.draw);
+      setWinner(true);
+      return;
     }
   };
 
   const computerMode = (squareNo: number) => {
-    if (winnerRef.current) return; // Om vinnare finns, stoppa datorn från att spela
-    updateCurrentIndex(1);
-    setCurrentLocalIndex(1);
     let randomNumber;
+    //Loop to find empty square
     do {
+      //Stop loop if winner
       if (winnerRef.current) return;
       randomNumber = Math.floor(Math.random() * 9);
-      console.log('randomNumber:', randomNumber, 'squareNo:', squareNo);
     } while (squares[randomNumber] || randomNumber === squareNo);
-
-    // Datorn gör sitt drag
+    //Make turn for computer
     changeMark(randomNumber, marks[1]);
-    updateCurrentIndex(0);
-    setCurrentLocalIndex(0);
   };
 
   const changeMark = (squareNo: number, mark: string) => {
     setSquares((prevSquares) => {
-      // Kontrollera om rutan redan har en markering
+      //Check for marks
       if (prevSquares[squareNo]) {
         return prevSquares;
       }
-
-      // Uppdatera squares-arrayen med spelarens/datorns mark
+      //Update squares with new array
       const newSquares = [...prevSquares];
       newSquares[squareNo] = mark;
       return newSquares;
@@ -109,12 +102,14 @@ export default function Board({ mode }: { mode: string }) {
   };
 
   const runGame = (squareNo: number, mark: string) => {
-    if (mode === 'locally') {
+    if (mode === options[1]) {
+      //Local mode = run changeMark onClick
       changeMark(squareNo, mark);
-    } else if (mode === 'computer') {
+    } else if (mode === options[0]) {
+      //Computer mode = run changeMark onClick for player
       changeMark(squareNo, marks[0]);
+      //After timeout, if no winner run computerMode
       setTimeout(() => {
-        console.log('in timeout; ', winnerRef.current);
         if (!winnerRef.current) {
           computerMode(squareNo);
         }
@@ -140,8 +135,8 @@ export default function Board({ mode }: { mode: string }) {
             key={i}
             squareNo={i}
             mark={square}
-            changeMark={runGame}
-            currentIndex={currentLocalIndex}
+            action={runGame}
+            currentIndex={currentIndex}
           />
         );
       })}

@@ -3,12 +3,12 @@ import '../style/square.scss';
 
 export default function Square({
   squareNo,
-  changeMark,
+  action,
   mark,
   currentIndex,
 }: {
   squareNo: number;
-  changeMark: (squareNo: number, mark: string) => void;
+  action: (squareNo: number, mark: string) => void;
   mark: string;
   currentIndex: number;
 }) {
@@ -18,7 +18,7 @@ export default function Square({
     //Handle mark, check to refactor.
     if (!mark) {
       const newMark = marks[currentIndex];
-      changeMark(squareNo, newMark);
+      action(squareNo, newMark);
     }
   };
 

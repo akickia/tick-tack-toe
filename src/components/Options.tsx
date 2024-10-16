@@ -26,14 +26,14 @@ export default function Options() {
           onChange={handleChange}
         ></input>
         <label htmlFor="locally">{language.locally}</label>
-        <input
+        {/* <input
           type="radio"
           id="online"
           value={options[2]}
           checked={chosenOption === options[2]}
           onChange={handleChange}
         ></input>
-        <label htmlFor="online">{language.online}</label>
+        <label htmlFor="online">{language.online}</label> */}
       </form>
       <p>{chosenOption}</p>
     </section>
