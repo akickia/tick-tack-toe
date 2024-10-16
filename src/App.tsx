@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useStore } from './store/store';
 import Board from './components/Board';
 import Toggle from './components/Toggle';
@@ -18,7 +17,7 @@ export default function App() {
   } = useStore();
 
   const startGame = () => {
-    //Handle starting options
+    //Handle starting settings
     updateCurrentIndex(0);
     setIsStarted(true);
   };
@@ -28,7 +27,7 @@ export default function App() {
       <main>
         <div className="App">
           <h1>{language.heading}</h1>
-          <Options />
+          {!isStarted && <Options />}
           {!isStarted && chosenOption === 'locally' ? (
             players.map((player, i) => (
               <Player key={i} player={player} currentUserIndex={i} />
@@ -40,10 +39,11 @@ export default function App() {
             <p>{players[currentIndex]}</p>
           )}
           <div className="card">
-            {!isStarted && (
+            {!isStarted ? (
               <button onClick={() => startGame()}>{language.start}</button>
+            ) : (
+              <Board mode={chosenOption}></Board>
             )}
-            <Board></Board>
           </div>
           <Toggle />
         </div>

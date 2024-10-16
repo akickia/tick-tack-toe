@@ -5,12 +5,14 @@ export default function Square({
   squareNo,
   changeMark,
   mark,
+  currentIndex,
 }: {
   squareNo: number;
   changeMark: (squareNo: number, mark: string) => void;
   mark: string;
+  currentIndex: number;
 }) {
-  const { marks, currentIndex } = useStore();
+  const { marks } = useStore();
 
   const handleClick = () => {
     //Handle mark, check to refactor.

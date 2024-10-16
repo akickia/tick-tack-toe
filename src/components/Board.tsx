@@ -1,35 +1,49 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useStore } from '../store/store';
 import Square from './Square';
 import '../style/board.scss';
 
-export default function Board({}) {
+export default function Board({ mode }: { mode: string }) {
   const [squares, setSquares] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState(false);
   const [isWinner, setIsWinner] = useState('');
+  const [currentLocalIndex, setCurrentLocalIndex] = useState(0);
   const {
     players,
-    isStarted,
+    marks,
     currentIndex,
-    updateCurrentIndex,
     setIsStarted,
+    updateCurrentIndex,
     language,
   } = useStore();
+  console.log('Rerender: ' + squares);
+  // console.log(currentIndex, currentLocalIndex);
+
+  const isFirstRender = useRef(true);
+  const winnerRef = useRef(winner);
 
   useEffect(() => {
-    //Check winner when squares change
-    checkWinner();
-    if (!winner) {
-      //If no winner - change currentIndex
-      handleCurrentIndex();
-    }
-  }, [squares]);
+    winnerRef.current = winner;
+  }, [winner]);
 
-  const handleCurrentIndex = () => {
-    currentIndex === 0 ? updateCurrentIndex(1) : updateCurrentIndex(0);
-  };
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (!winnerRef.current) {
+      checkWinner();
+    }
+    if (mode === 'locally') {
+      setCurrentLocalIndex((prevState) => (prevState === 1 ? 0 : 1));
+      updateCurrentIndex(currentIndex === 1 ? 0 : 1);
+    }
+  }, [squares]); // Trigger endast när squares uppdateras
 
   const checkWinner = () => {
+    console.log('In winner function');
+    if (winnerRef.current) return;
     //Specify combinations
     const winnerCombinations = [
       [0, 1, 2],
@@ -49,7 +63,7 @@ export default function Board({}) {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        setIsWinner(players[currentIndex]);
+        setIsWinner(players[currentLocalIndex]);
         setWinner(true);
         return;
       } else {
@@ -63,11 +77,50 @@ export default function Board({}) {
     }
   };
 
+  const computerMode = (squareNo: number) => {
+    if (winnerRef.current) return; // Om vinnare finns, stoppa datorn från att spela
+    updateCurrentIndex(1);
+    setCurrentLocalIndex(1);
+    let randomNumber;
+    do {
+      if (winnerRef.current) return;
+      randomNumber = Math.floor(Math.random() * 9);
+      console.log('randomNumber:', randomNumber, 'squareNo:', squareNo);
+    } while (squares[randomNumber] || randomNumber === squareNo);
+
+    // Datorn gör sitt drag
+    changeMark(randomNumber, marks[1]);
+    updateCurrentIndex(0);
+    setCurrentLocalIndex(0);
+  };
+
   const changeMark = (squareNo: number, mark: string) => {
-    if (!squares[squareNo]) {
-      const newSquares = [...squares];
+    setSquares((prevSquares) => {
+      // Kontrollera om rutan redan har en markering
+      if (prevSquares[squareNo]) {
+        return prevSquares;
+      }
+
+      // Uppdatera squares-arrayen med spelarens/datorns mark
+      const newSquares = [...prevSquares];
       newSquares[squareNo] = mark;
-      setSquares(newSquares);
+      return newSquares;
+    });
+  };
+
+  const runGame = (squareNo: number, mark: string) => {
+    if (mode === 'locally') {
+      changeMark(squareNo, mark);
+    } else if (mode === 'computer') {
+      changeMark(squareNo, marks[0]);
+      setTimeout(() => {
+        console.log('in timeout; ', winnerRef.current);
+        if (!winnerRef.current) {
+          computerMode(squareNo);
+        }
+      }, 500);
+    } else {
+      console.log('else');
     }
   };
 
@@ -81,25 +134,25 @@ export default function Board({}) {
 
   return (
     <div className="board">
-      {isStarted && !winner
-        ? squares.map((square, i) => {
-            return (
-              <Square
-                key={i}
-                squareNo={i}
-                mark={square}
-                changeMark={changeMark}
-              />
-            );
-          })
-        : winner && (
-            <div className="winning-container">
-              <h1 className="win">
-                {isWinner.toLocaleUpperCase()} {language.win}
-              </h1>
-              <button onClick={resetGame}>{language.restart}</button>
-            </div>
-          )}
+      {squares.map((square, i) => {
+        return (
+          <Square
+            key={i}
+            squareNo={i}
+            mark={square}
+            changeMark={runGame}
+            currentIndex={currentLocalIndex}
+          />
+        );
+      })}
+      {winner && (
+        <div className="winning-container">
+          <h1 className="win">
+            {isWinner.toLocaleUpperCase()} {language.win}
+          </h1>
+          <button onClick={resetGame}>{language.restart}</button>
+        </div>
+      )}
     </div>
   );
 }
