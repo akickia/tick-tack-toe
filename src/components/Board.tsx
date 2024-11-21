@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useStore } from '../store/store';
 import Square from './Square';
 import '../style/board.scss';
+import { langEng } from '../assets/translations';
 
 export default function Board({ mode }: { mode: string }) {
   const [squares, setSquares] = useState(Array(9).fill(''));
@@ -20,6 +21,17 @@ export default function Board({ mode }: { mode: string }) {
   const isFirstRender = useRef(true);
   const winnerRef = useRef(winner);
 
+  function getWins() {
+    let localWins = localStorage.getItem('wins');
+    if (localWins) {
+      return parseInt(localWins);
+    } else {
+      return 0;
+    }
+  }
+
+  let wins = getWins();
+
   useEffect(() => {
     //Make sure winnerState is correct using ref
     winnerRef.current = winner;
@@ -37,6 +49,7 @@ export default function Board({ mode }: { mode: string }) {
     }
     //Update turn
     updateCurrentIndex(currentIndex === 1 ? 0 : 1);
+    console.log('wins: ', wins);
   }, [squares]);
 
   const checkWinner = () => {
@@ -63,6 +76,7 @@ export default function Board({ mode }: { mode: string }) {
           setIsWinner(language.computer);
         } else {
           setIsWinner(players[currentIndex]);
+          localStorage.setItem('wins', (wins + 1).toString());
         }
         setWinner(true);
         return;
@@ -77,6 +91,7 @@ export default function Board({ mode }: { mode: string }) {
   };
 
   const computerMode = (squareNo: number) => {
+    //TODO: Make computer smarter instead of random marks.
     let randomNumber;
     //Loop to find empty square
     do {
@@ -128,26 +143,36 @@ export default function Board({ mode }: { mode: string }) {
   };
 
   return (
-    <div className="board">
-      {squares.map((square, i) => {
-        return (
-          <Square
-            key={i}
-            squareNo={i}
-            mark={square}
-            action={runGame}
-            currentIndex={currentIndex}
-          />
-        );
-      })}
-      {winner && (
-        <div className="winning-container">
-          <h1 className="win">
-            {isWinner.toLocaleUpperCase()} {language.win}
-          </h1>
-          <button onClick={resetGame}>{language.restart}</button>
-        </div>
-      )}
-    </div>
+    <>
+      <div className="board">
+        {squares.map((square, i) => {
+          return (
+            <Square
+              key={i}
+              squareNo={i}
+              mark={square}
+              action={runGame}
+              currentIndex={currentIndex}
+            />
+          );
+        })}
+        {winner && (
+          <div className="winning-container">
+            <h1 className="win">
+              {isWinner.toLocaleUpperCase()} {language.win}
+            </h1>
+            <button onClick={resetGame}>{language.restart}</button>
+          </div>
+        )}
+      </div>
+      <h3>
+        {wins}{' '}
+        {wins === 1
+          ? language.wins
+          : language === langEng
+          ? language.wins + 's'
+          : language.wins + 'er'}
+      </h3>
+    </>
   );
 }

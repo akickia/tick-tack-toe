@@ -21,7 +21,6 @@ export default function App() {
     updateCurrentIndex(0);
     setIsStarted(true);
   };
-
   return (
     <>
       <main>

@@ -7,6 +7,7 @@ export const langEng = {
   start: 'START GAME',
   draw: 'NO ONE',
   win: 'WON!',
+  wins: 'win',
   restart: 'RESTART GAME',
   toggle: 'Change to Swedish',
   computer: 'Computer',
@@ -24,6 +25,7 @@ export const langSwe = {
   start: 'STARTA',
   draw: 'INGEN',
   win: 'VANN!',
+  wins: 'vinst',
   restart: 'BÖRJA OM',
   toggle: 'Change to English',
   computer: 'Dator',
@@ -41,6 +43,7 @@ export type Languages = {
   start: string;
   draw: string;
   win: string;
+  wins: string;
   restart: string;
   toggle: string;
   computer: string;
